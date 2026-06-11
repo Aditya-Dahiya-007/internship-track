@@ -488,13 +488,14 @@
 
   async function saveNote() {
     const val = document.getElementById('note-input').value.trim();
-    if (val) { notes[currentModalKey] = val; }
-    else     { delete notes[currentModalKey]; }
+    const keyToSave = currentModalKey; // capture before closeModal clears it
+    if (val) { notes[keyToSave] = val; }
+    else     { delete notes[keyToSave]; }
     closeModal();
     renderCalendar();
     setSyncStatus('syncing', 'saving...');
     try {
-      await dbSet('note:' + currentModalKey, val || '');
+      await dbSet('note:' + keyToSave, val || '');
       setSyncStatus('synced', 'saved');
     } catch {
       setSyncStatus('error', 'save failed');
