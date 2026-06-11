@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Internship Survival Tracker</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:        #0d0f14;
+      --surface:   #151821;
+      --surface2:  #1c2030;
+      --border:    #252a38;
+      --muted:     #3a4055;
+      --text:      #e2e6f0;
+      --dim:       #6b7390;
+      --accent:    #7c6aff;
+      --accent-glow: rgba(124,106,255,0.18);
+      --done:      #2a3a2e;
+      --done-text: #5ecc77;
+      --mono: 'JetBrains Mono', monospace;
+      --sans: 'Inter', sans-serif;
+    }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      min-height: 100vh;
+      padding: 2rem 1rem 4rem;
+    }
+    header {
+      max-width: 860px;
+      margin: 0 auto 3rem;
+      text-align: center;
+    }
+    .eyebrow {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+    h1 {
+      font-size: clamp(1.6rem, 5vw, 2.6rem);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      color: var(--text);
+    }
+    h1 span { color: var(--dim); font-weight: 300; }
+
+    /* sync status */
+    .sync-bar {
+      max-width: 860px;
+      margin: -1.5rem auto 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      color: var(--dim);
+      letter-spacing: 0.06em;
+    }
+    .sync-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--muted);
+      transition: background 0.3s;
+    }
+    .sync-dot.syncing  { background: #f0a500; animation: pulse 1s infinite; }
+    .sync-dot.synced   { background: var(--done-text); }
+    .sync-dot.error    { background: #e05555; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+    .stats {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 3rem;
+    }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.4rem 2rem;
+      text-align: center;
+      min-width: 140px;
+    }
+    .stat-card.highlight { border-color: var(--accent); box-shadow: 0 0 28px var(--accent-glow); }
+    .stat-number {
+      font-family: var(--mono);
+      font-size: 2.8rem;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 0.4rem;
+      color: var(--text);
+    }
+    .stat-card.highlight .stat-number { color: var(--accent); }
+    .stat-card.done-card .stat-number { color: var(--done-text); }
+    .stat-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--dim);
+      font-family: var(--mono);
+    }
+    .progress-wrap { max-width: 860px; margin: 0 auto 2.5rem; }
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--dim);
+      margin-bottom: 0.5rem;
+    }
+    .progress-track { height: 6px; background: var(--border); border-radius: 99px; overflow: hidden; }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), #a78bfa);
+      border-radius: 99px;
+      transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
+    }
+    .calendar { max-width: 860px; margin: 0 auto; display: flex; flex-direction: column; gap: 2.5rem; }
+    .month-label {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--dim);
+      margin-bottom: 1rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .days-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 0.55rem; }
+    .day-cell {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.7rem 0.6rem 0.6rem;
+      user-select: none;
+      transition: background 0.15s, border-color 0.15s;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    .day-cell.completed { background: var(--done); border-color: #3d5c44; }
+    .day-cell.today     { border-color: var(--accent); box-shadow: 0 0 12px var(--accent-glow); }
+    .cell-top { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; }
+    .cell-top:hover .checkbox { border-color: var(--accent); }
+    .checkbox {
+      width: 16px; height: 16px;
+      border-radius: 4px;
+      border: 1.5px solid var(--muted);
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .day-cell.completed .checkbox { background: var(--done-text); border-color: var(--done-text); }
+    .checkmark { display: none; width: 9px; height: 9px; }
+    .day-cell.completed .checkmark { display: block; }
+    .day-info { display: flex; flex-direction: column; }
+    .day-num { font-family: var(--mono); font-size: 0.95rem; font-weight: 700; color: var(--text); line-height: 1; }
+    .day-cell.completed .day-num { color: var(--done-text); }
+    .day-name { font-size: 0.62rem; color: var(--dim); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 2px; }
+    .day-cell.completed .day-name { color: var(--done-text); }
+    .today-badge { font-family: var(--mono); font-size: 0.5rem; color: var(--accent); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 2px; }
+    .note-btn {
+      align-self: flex-start;
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 0.25rem 0.5rem;
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      color: var(--dim);
+      cursor: pointer;
+      letter-spacing: 0.05em;
+      transition: border-color 0.15s, color 0.15s, background 0.15s;
+      display: flex; align-items: center; gap: 0.3rem;
+    }
+    .note-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-glow); }
+    .note-btn.has-note { border-color: #a78bfa55; color: #a78bfa; }
+    .note-dot { width: 5px; height: 5px; border-radius: 50%; background: #a78bfa; display: none; }
+    .note-btn.has-note .note-dot { display: block; }
+
+    /* MODAL */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.65);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      align-items: center; justify-content: center;
+      padding: 1rem;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      width: 100%; max-width: 480px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+      animation: modal-in 0.2s cubic-bezier(0.34,1.56,0.64,1);
+      overflow: hidden;
+    }
+    @keyframes modal-in {
+      from { opacity:0; transform: scale(0.92) translateY(12px); }
+      to   { opacity:1; transform: scale(1) translateY(0); }
+    }
+    .modal-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 1.4rem 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .modal-date { font-family: var(--mono); font-size: 0.75rem; color: var(--accent); letter-spacing: 0.12em; text-transform: uppercase; }
+    .modal-close { background: none; border: none; color: var(--dim); cursor: pointer; font-size: 1.2rem; line-height: 1; padding: 0.2rem 0.4rem; border-radius: 4px; transition: color 0.15s, background 0.15s; }
+    .modal-close:hover { color: var(--text); background: var(--border); }
+    .modal-body { padding: 1.2rem 1.4rem; }
+    .modal-label { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); margin-bottom: 0.6rem; }
+    .note-view { font-size: 0.92rem; line-height: 1.65; color: var(--text); white-space: pre-wrap; word-break: break-word; min-height: 60px; }
+    .note-view.empty { color: var(--muted); font-style: italic; }
+    .note-textarea {
+      width: 100%; min-height: 140px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.8rem 1rem;
+      font-family: var(--sans); font-size: 0.9rem; line-height: 1.6;
+      color: var(--text); resize: vertical; outline: none;
+      transition: border-color 0.15s;
+    }
+    .note-textarea:focus { border-color: var(--accent); }
+    .note-textarea::placeholder { color: var(--muted); }
+    .modal-footer {
+      display: flex; justify-content: flex-end; gap: 0.6rem;
+      padding: 1rem 1.4rem 1.2rem;
+      border-top: 1px solid var(--border);
+    }
+    .btn { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.06em; padding: 0.5rem 1.1rem; border-radius: 6px; border: 1px solid var(--border); cursor: pointer; transition: all 0.15s; }
+    .btn-ghost { background: none; color: var(--dim); }
+    .btn-ghost:hover { color: var(--text); border-color: var(--muted); }
+    .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .btn-primary:hover { background: #6a58e8; }
+    footer { text-align: center; margin-top: 4rem; font-family: var(--mono); font-size: 0.65rem; color: var(--muted); letter-spacing: 0.05em; }
+    @media (max-width: 480px) {
+      .days-grid { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); }
+      .stat-number { font-size: 2.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <p class="eyebrow">Internship Survival Tracker</p>
+  <h1>June 10 → July 31, 2026 <br/><span>hang in there, king</span></h1>
+</header>
+
+<div class="sync-bar">
+  <div class="sync-dot" id="sync-dot"></div>
+  <span id="sync-label">loading...</span>
+</div>
+
+<div class="stats" id="stats"></div>
+
+<div class="progress-wrap">
+  <div class="progress-meta">
+    <span id="pct-label">0% survived</span>
+    <span>Jun 10 – Jul 31</span>
+  </div>
+  <div class="progress-track">
+    <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+  </div>
+</div>
+
+<div class="calendar" id="calendar"></div>
+
+<footer><p>synced to the cloud · works on all your devices 🫡</p></footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-date" id="modal-date"></div>
+      <button class="modal-close" id="modal-close">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-footer" id="modal-footer"></div>
+  </div>
+</div>
+
+<script>
+  // ── SUPABASE CONFIG ──
+  const SUPABASE_URL = 'https://rprlwfagycyznblsyxpq.supabase.co/rest/v1';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJwcmx3ZmFneWN5em5ibHN5eHBxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExNjI5NjcsImV4cCI6MjA5NjczODk2N30.3UITh1EYBA58CSf-ImK6691uvnZwC2mb2PTwlE5Jjqw';
+
+  const HEADERS = {
+    'apikey': SUPABASE_KEY,
+    'Authorization': 'Bearer ' + SUPABASE_KEY,
+    'Content-Type': 'application/json',
+    'Prefer': 'resolution=merge-duplicates'
+  };
+
+  async function dbGet(key) {
+    const res = await fetch(`${SUPABASE_URL}/tracker?key=eq.${key}&select=value`, { headers: HEADERS });
+    const data = await res.json();
+    return data && data[0] ? data[0].value : null;
+  }
+
+  async function dbSet(key, value) {
+    await fetch(`${SUPABASE_URL}/tracker`, {
+      method: 'POST',
+      headers: HEADERS,
+      body: JSON.stringify({ key, value, updated_at: new Date().toISOString() })
+    });
+  }
+
+  async function dbLoadAll() {
+    const res = await fetch(`${SUPABASE_URL}/tracker?select=key,value`, { headers: HEADERS });
+    const rows = await res.json();
+    const done = {}, notes = {};
+    if (Array.isArray(rows)) {
+      rows.forEach(r => {
+        if (r.key.startsWith('done:'))  done[r.key.slice(5)]  = JSON.parse(r.value);
+        if (r.key.startsWith('note:'))  notes[r.key.slice(5)] = r.value;
+      });
+    }
+    return { done, notes };
+  }
+
+  // ── SYNC STATUS ──
+  function setSyncStatus(state, text) {
+    const dot   = document.getElementById('sync-dot');
+    const label = document.getElementById('sync-label');
+    dot.className = 'sync-dot ' + state;
+    label.textContent = text;
+  }
+
+  // ── DATE HELPERS ──
+  const START = new Date(2026, 5, 10);
+  const END   = new Date(2026, 6, 31);
+  const DAYS_OF_WEEK = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const MONTH_NAMES  = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  function allDays() {
+    const days = []; let d = new Date(START);
+    while (d <= END) { days.push(new Date(d)); d.setDate(d.getDate()+1); }
+    return days;
+  }
+  function today() { const t = new Date(); t.setHours(0,0,0,0); return t; }
+  function dateKey(d) { return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+  function formatFull(d) { return `${DAYS_OF_WEEK[d.getDay()]}, ${MONTH_NAMES[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`; }
+
+  const days = allDays();
+  let done  = {};
+  let notes = {};
+
+  // ── STATS ──
+  function renderStats() {
+    const total     = days.length;
+    const completed = Object.values(done).filter(Boolean).length;
+    const remaining = total - completed;
+    const pct       = Math.round((completed / total) * 100);
+    document.getElementById('stats').innerHTML = `
+      <div class="stat-card highlight">
+        <div class="stat-number">${remaining}</div>
+        <div class="stat-label">days left</div>
+      </div>
+      <div class="stat-card done-card">
+        <div class="stat-number">${completed}</div>
+        <div class="stat-label">days done</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">${total}</div>
+        <div class="stat-label">total days</div>
+      </div>`;
+    document.getElementById('progress-fill').style.width = pct + '%';
+    document.getElementById('pct-label').textContent = pct + '% survived';
+  }
+
+  // ── CALENDAR ──
+  function renderCalendar() {
+    const todayDate = today();
+    const months = {};
+    days.forEach(d => {
+      const mk = `${d.getFullYear()}-${d.getMonth()}`;
+      if (!months[mk]) months[mk] = { label: MONTH_NAMES[d.getMonth()] + ' ' + d.getFullYear(), days: [] };
+      months[mk].days.push(d);
+    });
+
+    const cal = document.getElementById('calendar');
+    cal.innerHTML = '';
+
+    Object.values(months).forEach(month => {
+      const block = document.createElement('div');
+      block.className = 'month-block';
+      block.innerHTML = `<div class="month-label">${month.label}</div>`;
+      const grid = document.createElement('div');
+      grid.className = 'days-grid';
+
+      month.days.forEach(d => {
+        const key     = dateKey(d);
+        const isToday = d.getTime() === todayDate.getTime();
+        const isPast  = d < todayDate;
+        const isDone  = !!done[key];
+        const hasNote = !!(notes[key] && notes[key].trim());
+
+        const cell = document.createElement('div');
+        cell.className = 'day-cell' + (isDone ? ' completed' : '') + (isToday ? ' today' : '');
+
+        cell.innerHTML = `
+          <div class="cell-top">
+            <div class="checkbox">
+              <svg class="checkmark" viewBox="0 0 10 10" fill="none">
+                <path d="M1.5 5L4 7.5L8.5 2.5" stroke="#0d0f14" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="day-info">
+              <div class="day-num">${String(d.getDate()).padStart(2,'0')}</div>
+              <div class="day-name">${DAYS_OF_WEEK[d.getDay()]}</div>
+              ${isToday ? '<div class="today-badge">today</div>' : ''}
+            </div>
+          </div>
+          <button class="note-btn${hasNote ? ' has-note' : ''}">
+            <span class="note-dot"></span>
+            ${hasNote ? 'view note' : (isToday || isPast ? '+ note' : 'note')}
+          </button>`;
+
+        cell.querySelector('.cell-top').addEventListener('click', async () => {
+          done[key] = !done[key];
+          cell.classList.toggle('completed', done[key]);
+          renderStats();
+          setSyncStatus('syncing', 'saving...');
+          try {
+            await dbSet('done:' + key, JSON.stringify(done[key]));
+            setSyncStatus('synced', 'saved');
+          } catch {
+            setSyncStatus('error', 'save failed');
+          }
+        });
+
+        cell.querySelector('.note-btn').addEventListener('click', (e) => {
+          e.stopPropagation();
+          openModal(new Date(d), key, isToday || isPast);
+        });
+
+        grid.appendChild(cell);
+      });
+
+      block.appendChild(grid);
+      cal.appendChild(block);
+    });
+  }
+
+  // ── MODAL ──
+  let currentModalKey = null;
+
+  function openModal(d, key, canEdit) {
+    currentModalKey = key;
+    const existing  = notes[key] || '';
+    document.getElementById('modal-date').textContent = formatFull(d);
+
+    const body   = document.getElementById('modal-body');
+    const footer = document.getElementById('modal-footer');
+
+    if (canEdit) {
+      body.innerHTML = `
+        <div class="modal-label">what happened today</div>
+        <textarea class="note-textarea" id="note-input" placeholder="jot down what you did, survived, or suffered through...">${existing}</textarea>`;
+      footer.innerHTML = `
+        <button class="btn btn-ghost" id="modal-cancel-btn">cancel</button>
+        <button class="btn btn-primary" id="modal-save-btn">save note</button>`;
+      document.getElementById('note-input').focus();
+      document.getElementById('modal-save-btn').addEventListener('click', saveNote);
+      document.getElementById('modal-cancel-btn').addEventListener('click', closeModal);
+    } else {
+      body.innerHTML = `
+        <div class="modal-label">entry</div>
+        <div class="note-view empty">this day hasn't happened yet.</div>`;
+      footer.innerHTML = `<button class="btn btn-ghost" id="modal-cancel-btn">close</button>`;
+      document.getElementById('modal-cancel-btn').addEventListener('click', closeModal);
+    }
+
+    document.getElementById('modal-overlay').classList.add('open');
+  }
+
+  async function saveNote() {
+    const val = document.getElementById('note-input').value.trim();
+    if (val) { notes[currentModalKey] = val; }
+    else     { delete notes[currentModalKey]; }
+    closeModal();
+    renderCalendar();
+    setSyncStatus('syncing', 'saving...');
+    try {
+      await dbSet('note:' + currentModalKey, val || '');
+      setSyncStatus('synced', 'saved');
+    } catch {
+      setSyncStatus('error', 'save failed');
+    }
+  }
+
+  function closeModal() {
+    document.getElementById('modal-overlay').classList.remove('open');
+    currentModalKey = null;
+  }
+
+  document.getElementById('modal-close').addEventListener('click', closeModal);
+  document.getElementById('modal-overlay').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('modal-overlay')) closeModal();
+  });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+  // ── INIT: load from Supabase ──
+  (async () => {
+    setSyncStatus('syncing', 'loading...');
+    try {
+      const data = await dbLoadAll();
+      done  = data.done;
+      notes = data.notes;
+      setSyncStatus('synced', 'synced');
+    } catch {
+      setSyncStatus('error', 'offline — changes may not save');
+    }
+    renderStats();
+    renderCalendar();
+  })();
+</script>
+</body>
+</html>
