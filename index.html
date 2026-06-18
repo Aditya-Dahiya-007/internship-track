@@ -393,9 +393,7 @@
     const remaining = total - completed;
     const pct       = Math.round((completed / total) * 100);
     const totalSpent = Object.values(spend).reduce((s, v) => s + (parseFloat(v) || 0), 0);
-    const spentDisplay = totalSpent >= 1000
-      ? '₹' + (totalSpent/1000).toFixed(1) + 'k'
-      : '₹' + Math.round(totalSpent);
+    const spentDisplay = '₹' + Math.round(totalSpent);
     document.getElementById('stats').innerHTML = `
       <div class="stat-card highlight">
         <div class="stat-number">${remaining}</div>
