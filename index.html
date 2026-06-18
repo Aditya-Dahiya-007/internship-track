@@ -187,6 +187,33 @@
     .note-dot { width: 5px; height: 5px; border-radius: 50%; background: #a78bfa; display: none; }
     .note-btn.has-note .note-dot { display: block; }
 
+    /* spend badge on day cell */
+    .spend-badge {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      color: #f0a500;
+      letter-spacing: 0.03em;
+    }
+    /* money stat card */
+    .stat-card.money-card .stat-number { color: #f0a500; font-size: 1.9rem; }
+    /* modal money input */
+    .modal-section { margin-top: 1.1rem; }
+    .money-input-wrap {
+      display: flex; align-items: center; gap: 0.5rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.6rem 1rem;
+      transition: border-color 0.15s;
+    }
+    .money-input-wrap:focus-within { border-color: #f0a500; }
+    .rupee-symbol { font-family: var(--mono); font-size: 0.95rem; color: #f0a500; flex-shrink: 0; }
+    .money-input {
+      background: none; border: none; outline: none;
+      font-family: var(--mono); font-size: 0.95rem; color: var(--text); width: 100%;
+    }
+    .money-input::placeholder { color: var(--muted); }
+
     /* MODAL */
     .modal-overlay {
       display: none; position: fixed; inset: 0;
@@ -320,14 +347,15 @@
   async function dbLoadAll() {
     const res = await fetch(`${SUPABASE_URL}/tracker?select=key,value`, { headers: HEADERS });
     const rows = await res.json();
-    const done = {}, notes = {};
+    const done = {}, notes = {}, spend = {};
     if (Array.isArray(rows)) {
       rows.forEach(r => {
         if (r.key.startsWith('done:'))  done[r.key.slice(5)]  = JSON.parse(r.value);
         if (r.key.startsWith('note:'))  notes[r.key.slice(5)] = r.value;
+        if (r.key.startsWith('spend:')) spend[r.key.slice(6)] = r.value;
       });
     }
-    return { done, notes };
+    return { done, notes, spend };
   }
 
   // ── SYNC STATUS ──
@@ -356,6 +384,7 @@
   const days = allDays();
   let done  = {};
   let notes = {};
+  let spend = {};
 
   // ── STATS ──
   function renderStats() {
@@ -363,6 +392,10 @@
     const completed = Object.values(done).filter(Boolean).length;
     const remaining = total - completed;
     const pct       = Math.round((completed / total) * 100);
+    const totalSpent = Object.values(spend).reduce((s, v) => s + (parseFloat(v) || 0), 0);
+    const spentDisplay = totalSpent >= 1000
+      ? '₹' + (totalSpent/1000).toFixed(1) + 'k'
+      : '₹' + Math.round(totalSpent);
     document.getElementById('stats').innerHTML = `
       <div class="stat-card highlight">
         <div class="stat-number">${remaining}</div>
@@ -375,6 +408,10 @@
       <div class="stat-card">
         <div class="stat-number">${total}</div>
         <div class="stat-label">total days</div>
+      </div>
+      <div class="stat-card money-card">
+        <div class="stat-number">${spentDisplay}</div>
+        <div class="stat-label">total spent</div>
       </div>`;
     document.getElementById('progress-fill').style.width = pct + '%';
     document.getElementById('pct-label').textContent = pct + '% survived';
@@ -426,7 +463,8 @@
           <button class="note-btn${hasNote ? ' has-note' : ''}">
             <span class="note-dot"></span>
             ${hasNote ? 'view note' : (isToday || isPast ? '+ note' : 'note')}
-          </button>`;
+          </button>
+          ${spend[key] ? `<div class="spend-badge">₹${spend[key]}</div>` : ''}`;
 
         cell.querySelector('.cell-top').addEventListener('click', async () => {
           done[key] = !done[key];
@@ -466,9 +504,17 @@
     const footer = document.getElementById('modal-footer');
 
     if (canEdit) {
+      const existingSpend = spend[key] || '';
       body.innerHTML = `
         <div class="modal-label">what happened today</div>
-        <textarea class="note-textarea" id="note-input" placeholder="jot down what you did, survived, or suffered through...">${existing}</textarea>`;
+        <textarea class="note-textarea" id="note-input" placeholder="jot down what you did, survived, or suffered through...">${existing}</textarea>
+        <div class="modal-section">
+          <div class="modal-label">money spent (₹)</div>
+          <div class="money-input-wrap">
+            <span class="rupee-symbol">₹</span>
+            <input class="money-input" id="spend-input" type="number" min="0" placeholder="0" value="${existingSpend}"/>
+          </div>
+        </div>`;
       footer.innerHTML = `
         <button class="btn btn-ghost" id="modal-cancel-btn">cancel</button>
         <button class="btn btn-primary" id="modal-save-btn">save note</button>`;
@@ -487,15 +533,20 @@
   }
 
   async function saveNote() {
-    const val = document.getElementById('note-input').value.trim();
-    const keyToSave = currentModalKey; // capture before closeModal clears it
-    if (val) { notes[keyToSave] = val; }
-    else     { delete notes[keyToSave]; }
+    const val      = document.getElementById('note-input').value.trim();
+    const spendVal = document.getElementById('spend-input').value.trim();
+    const keyToSave = currentModalKey;
+    if (val) { notes[keyToSave] = val; } else { delete notes[keyToSave]; }
+    if (spendVal) { spend[keyToSave] = spendVal; } else { delete spend[keyToSave]; }
     closeModal();
     renderCalendar();
+    renderStats();
     setSyncStatus('syncing', 'saving...');
     try {
-      await dbSet('note:' + keyToSave, val || '');
+      await Promise.all([
+        dbSet('note:' + keyToSave, val || ''),
+        dbSet('spend:' + keyToSave, spendVal || '')
+      ]);
       setSyncStatus('synced', 'saved');
     } catch {
       setSyncStatus('error', 'save failed');
@@ -520,6 +571,7 @@
       const data = await dbLoadAll();
       done  = data.done;
       notes = data.notes;
+      spend = data.spend;
       setSyncStatus('synced', 'synced');
     } catch {
       setSyncStatus('error', 'offline — changes may not save');
