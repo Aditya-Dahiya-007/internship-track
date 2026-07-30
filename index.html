@@ -28,137 +28,48 @@
       font-family: var(--sans);
       min-height: 100vh;
       padding: 2rem 1rem 4rem;
+      overflow-x: hidden;
     }
-    header {
-      max-width: 860px;
-      margin: 0 auto 3rem;
-      text-align: center;
-    }
-    .eyebrow {
-      font-family: var(--mono);
-      font-size: 0.7rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 1rem;
-    }
-    h1 {
-      font-size: clamp(1.6rem, 5vw, 2.6rem);
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      line-height: 1.15;
-      color: var(--text);
-    }
+    header { max-width: 860px; margin: 0 auto 3rem; text-align: center; }
+    .eyebrow { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; }
+    h1 { font-size: clamp(1.6rem, 5vw, 2.6rem); font-weight: 600; letter-spacing: -0.02em; line-height: 1.15; color: var(--text); }
     h1 span { color: var(--dim); font-weight: 300; }
 
-    /* sync status */
-    .sync-bar {
-      max-width: 860px;
-      margin: -1.5rem auto 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.4rem;
-      font-family: var(--mono);
-      font-size: 0.62rem;
-      color: var(--dim);
-      letter-spacing: 0.06em;
-    }
-    .sync-dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--muted);
-      transition: background 0.3s;
-    }
-    .sync-dot.syncing  { background: #f0a500; animation: pulse 1s infinite; }
-    .sync-dot.synced   { background: var(--done-text); }
-    .sync-dot.error    { background: #e05555; }
+    .sync-bar { max-width: 860px; margin: -1.5rem auto 2rem; display: flex; align-items: center; justify-content: center; gap: 0.4rem; font-family: var(--mono); font-size: 0.62rem; color: var(--dim); letter-spacing: 0.06em; }
+    .sync-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--muted); transition: background 0.3s; }
+    .sync-dot.syncing { background: #f0a500; animation: pulse 1s infinite; }
+    .sync-dot.synced  { background: var(--done-text); }
+    .sync-dot.error   { background: #e05555; }
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
 
-    .stats {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-bottom: 3rem;
-    }
-    .stat-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.4rem 2rem;
-      text-align: center;
-      min-width: 140px;
-    }
+    .stats { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 3rem; }
+    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.4rem 2rem; text-align: center; min-width: 140px; }
     .stat-card.highlight { border-color: var(--accent); box-shadow: 0 0 28px var(--accent-glow); }
-    .stat-number {
-      font-family: var(--mono);
-      font-size: 2.8rem;
-      font-weight: 700;
-      line-height: 1;
-      margin-bottom: 0.4rem;
-      color: var(--text);
-    }
+    .stat-number { font-family: var(--mono); font-size: 2.8rem; font-weight: 700; line-height: 1; margin-bottom: 0.4rem; color: var(--text); }
     .stat-card.highlight .stat-number { color: var(--accent); }
     .stat-card.done-card .stat-number { color: var(--done-text); }
-    .stat-label {
-      font-size: 0.72rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--dim);
-      font-family: var(--mono);
-    }
+    .stat-card.money-card .stat-number { color: #f0a500; font-size: 1.9rem; }
+    .stat-label { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); font-family: var(--mono); }
+
     .progress-wrap { max-width: 860px; margin: 0 auto 2.5rem; }
-    .progress-meta {
-      display: flex;
-      justify-content: space-between;
-      font-family: var(--mono);
-      font-size: 0.7rem;
-      color: var(--dim);
-      margin-bottom: 0.5rem;
-    }
+    .progress-meta { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 0.7rem; color: var(--dim); margin-bottom: 0.5rem; }
     .progress-track { height: 6px; background: var(--border); border-radius: 99px; overflow: hidden; }
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, var(--accent), #a78bfa);
-      border-radius: 99px;
-      transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
-    }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), #a78bfa); border-radius: 99px; transition: width 0.4s cubic-bezier(0.4,0,0.2,1); }
+
     .calendar { max-width: 860px; margin: 0 auto; display: flex; flex-direction: column; gap: 2.5rem; }
-    .month-label {
-      font-family: var(--mono);
-      font-size: 0.68rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--dim);
-      margin-bottom: 1rem;
-      padding-bottom: 0.6rem;
-      border-bottom: 1px solid var(--border);
-    }
+    .month-label { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--dim); margin-bottom: 1rem; padding-bottom: 0.6rem; border-bottom: 1px solid var(--border); }
     .days-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 0.55rem; }
-    .day-cell {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 0.7rem 0.6rem 0.6rem;
-      user-select: none;
-      transition: background 0.15s, border-color 0.15s;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
+
+    .day-cell { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 0.7rem 0.6rem 0.6rem; user-select: none; transition: background 0.15s, border-color 0.15s; display: flex; flex-direction: column; gap: 0.5rem; }
     .day-cell.completed { background: var(--done); border-color: #3d5c44; }
     .day-cell.today     { border-color: var(--accent); box-shadow: 0 0 12px var(--accent-glow); }
+    .day-cell.locked    { opacity: 0.35; cursor: not-allowed; }
+    .day-cell.last-day  { border-color: #f0a500; box-shadow: 0 0 14px rgba(240,165,0,0.25); }
+
     .cell-top { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; }
+    .day-cell.locked .cell-top { cursor: not-allowed; pointer-events: none; }
     .cell-top:hover .checkbox { border-color: var(--accent); }
-    .checkbox {
-      width: 16px; height: 16px;
-      border-radius: 4px;
-      border: 1.5px solid var(--muted);
-      flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-      transition: background 0.15s, border-color 0.15s;
-    }
+    .checkbox { width: 16px; height: 16px; border-radius: 4px; border: 1.5px solid var(--muted); flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: background 0.15s, border-color 0.15s; }
     .day-cell.completed .checkbox { background: var(--done-text); border-color: var(--done-text); }
     .checkmark { display: none; width: 9px; height: 9px; }
     .day-cell.completed .checkmark { display: block; }
@@ -168,80 +79,21 @@
     .day-name { font-size: 0.62rem; color: var(--dim); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 2px; }
     .day-cell.completed .day-name { color: var(--done-text); }
     .today-badge { font-family: var(--mono); font-size: 0.5rem; color: var(--accent); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 2px; }
-    .note-btn {
-      align-self: flex-start;
-      background: none;
-      border: 1px solid var(--border);
-      border-radius: 5px;
-      padding: 0.25rem 0.5rem;
-      font-family: var(--mono);
-      font-size: 0.58rem;
-      color: var(--dim);
-      cursor: pointer;
-      letter-spacing: 0.05em;
-      transition: border-color 0.15s, color 0.15s, background 0.15s;
-      display: flex; align-items: center; gap: 0.3rem;
-    }
+    .lock-badge  { font-family: var(--mono); font-size: 0.5rem; color: var(--muted); letter-spacing: 0.08em; margin-top: 2px; }
+
+    .note-btn { align-self: flex-start; background: none; border: 1px solid var(--border); border-radius: 5px; padding: 0.25rem 0.5rem; font-family: var(--mono); font-size: 0.58rem; color: var(--dim); cursor: pointer; letter-spacing: 0.05em; transition: border-color 0.15s, color 0.15s, background 0.15s; display: flex; align-items: center; gap: 0.3rem; }
     .note-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-glow); }
     .note-btn.has-note { border-color: #a78bfa55; color: #a78bfa; }
     .note-dot { width: 5px; height: 5px; border-radius: 50%; background: #a78bfa; display: none; }
     .note-btn.has-note .note-dot { display: block; }
-
-    /* spend badge on day cell */
-    .spend-badge {
-      font-family: var(--mono);
-      font-size: 0.58rem;
-      color: #f0a500;
-      letter-spacing: 0.03em;
-    }
-    /* money stat card */
-    .stat-card.money-card .stat-number { color: #f0a500; font-size: 1.9rem; }
-    /* modal money input */
-    .modal-section { margin-top: 1.1rem; }
-    .money-input-wrap {
-      display: flex; align-items: center; gap: 0.5rem;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 0.6rem 1rem;
-      transition: border-color 0.15s;
-    }
-    .money-input-wrap:focus-within { border-color: #f0a500; }
-    .rupee-symbol { font-family: var(--mono); font-size: 0.95rem; color: #f0a500; flex-shrink: 0; }
-    .money-input {
-      background: none; border: none; outline: none;
-      font-family: var(--mono); font-size: 0.95rem; color: var(--text); width: 100%;
-    }
-    .money-input::placeholder { color: var(--muted); }
+    .spend-badge { font-family: var(--mono); font-size: 0.58rem; color: #f0a500; letter-spacing: 0.03em; }
 
     /* MODAL */
-    .modal-overlay {
-      display: none; position: fixed; inset: 0;
-      background: rgba(0,0,0,0.65);
-      backdrop-filter: blur(4px);
-      z-index: 100;
-      align-items: center; justify-content: center;
-      padding: 1rem;
-    }
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.65); backdrop-filter: blur(4px); z-index: 100; align-items: center; justify-content: center; padding: 1rem; }
     .modal-overlay.open { display: flex; }
-    .modal {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      width: 100%; max-width: 480px;
-      box-shadow: 0 24px 60px rgba(0,0,0,0.5);
-      animation: modal-in 0.2s cubic-bezier(0.34,1.56,0.64,1);
-      overflow: hidden;
-    }
-    @keyframes modal-in {
-      from { opacity:0; transform: scale(0.92) translateY(12px); }
-      to   { opacity:1; transform: scale(1) translateY(0); }
-    }
-    .modal-header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 1.2rem 1.4rem 1rem;
-      border-bottom: 1px solid var(--border);
-    }
+    .modal { background: var(--surface2); border: 1px solid var(--border); border-radius: 14px; width: 100%; max-width: 480px; box-shadow: 0 24px 60px rgba(0,0,0,0.5); animation: modal-in 0.2s cubic-bezier(0.34,1.56,0.64,1); overflow: hidden; }
+    @keyframes modal-in { from{opacity:0;transform:scale(0.92) translateY(12px)} to{opacity:1;transform:scale(1) translateY(0)} }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 1.4rem 1rem; border-bottom: 1px solid var(--border); }
     .modal-date { font-family: var(--mono); font-size: 0.75rem; color: var(--accent); letter-spacing: 0.12em; text-transform: uppercase; }
     .modal-close { background: none; border: none; color: var(--dim); cursor: pointer; font-size: 1.2rem; line-height: 1; padding: 0.2rem 0.4rem; border-radius: 4px; transition: color 0.15s, background 0.15s; }
     .modal-close:hover { color: var(--text); background: var(--border); }
@@ -249,36 +101,137 @@
     .modal-label { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); margin-bottom: 0.6rem; }
     .note-view { font-size: 0.92rem; line-height: 1.65; color: var(--text); white-space: pre-wrap; word-break: break-word; min-height: 60px; }
     .note-view.empty { color: var(--muted); font-style: italic; }
-    .note-textarea {
-      width: 100%; min-height: 140px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 0.8rem 1rem;
-      font-family: var(--sans); font-size: 0.9rem; line-height: 1.6;
-      color: var(--text); resize: vertical; outline: none;
-      transition: border-color 0.15s;
-    }
+    .note-textarea { width: 100%; min-height: 140px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 0.8rem 1rem; font-family: var(--sans); font-size: 0.9rem; line-height: 1.6; color: var(--text); resize: vertical; outline: none; transition: border-color 0.15s; }
     .note-textarea:focus { border-color: var(--accent); }
     .note-textarea::placeholder { color: var(--muted); }
-    .modal-footer {
-      display: flex; justify-content: flex-end; gap: 0.6rem;
-      padding: 1rem 1.4rem 1.2rem;
-      border-top: 1px solid var(--border);
-    }
+    .modal-section { margin-top: 1.1rem; }
+    .money-input-wrap { display: flex; align-items: center; gap: 0.5rem; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 0.6rem 1rem; transition: border-color 0.15s; }
+    .money-input-wrap:focus-within { border-color: #f0a500; }
+    .rupee-symbol { font-family: var(--mono); font-size: 0.95rem; color: #f0a500; flex-shrink: 0; }
+    .money-input { background: none; border: none; outline: none; font-family: var(--mono); font-size: 0.95rem; color: var(--text); width: 100%; }
+    .money-input::placeholder { color: var(--muted); }
+    .modal-footer { display: flex; justify-content: flex-end; gap: 0.6rem; padding: 1rem 1.4rem 1.2rem; border-top: 1px solid var(--border); }
     .btn { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.06em; padding: 0.5rem 1.1rem; border-radius: 6px; border: 1px solid var(--border); cursor: pointer; transition: all 0.15s; }
     .btn-ghost { background: none; color: var(--dim); }
     .btn-ghost:hover { color: var(--text); border-color: var(--muted); }
     .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
     .btn-primary:hover { background: #6a58e8; }
-    footer { text-align: center; margin-top: 4rem; font-family: var(--mono); font-size: 0.65rem; color: var(--muted); letter-spacing: 0.05em; }
-    @media (max-width: 480px) {
-      .days-grid { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); }
-      .stat-number { font-size: 2.2rem; }
+
+    /* ── CELEBRATION SCREEN ── */
+    #celebration {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: #0d0f14;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 2rem;
     }
+    #celebration.show { display: flex; }
+
+    .cel-emoji { font-size: 4rem; margin-bottom: 1.5rem; animation: bounce 0.8s infinite alternate; }
+    @keyframes bounce { from{transform:translateY(0)} to{transform:translateY(-16px)} }
+
+    .cel-title {
+      font-size: clamp(2rem, 8vw, 4.5rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      background: linear-gradient(135deg, #7c6aff, #a78bfa, #5ecc77, #f0a500);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1rem;
+      animation: shimmer 3s linear infinite;
+      background-size: 200% auto;
+    }
+    @keyframes shimmer { to { background-position: 200% center; } }
+
+    .cel-sub {
+      font-family: var(--mono);
+      font-size: clamp(0.8rem, 2.5vw, 1rem);
+      color: var(--dim);
+      letter-spacing: 0.08em;
+      margin-bottom: 2.5rem;
+      max-width: 500px;
+    }
+
+    .cel-stats {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 2.5rem;
+    }
+    .cel-stat {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.5rem;
+      font-family: var(--mono);
+    }
+    .cel-stat-num { font-size: 1.6rem; font-weight: 700; color: var(--done-text); }
+    .cel-stat-label { font-size: 0.65rem; color: var(--dim); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 3px; }
+
+    .cel-btn {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      padding: 0.7rem 2rem;
+      border-radius: 8px;
+      border: none;
+      background: linear-gradient(135deg, var(--accent), #a78bfa);
+      color: #fff;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+      text-transform: uppercase;
+    }
+    .cel-btn:hover { opacity: 0.85; transform: scale(1.03); }
+
+    /* CONFETTI */
+    .confetti-piece {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      top: -20px;
+      animation: confetti-fall linear forwards;
+      pointer-events: none;
+      z-index: 300;
+    }
+    @keyframes confetti-fall {
+      0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+    }
+
+    canvas#fireworks {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 199;
+    }
+
+    footer { text-align: center; margin-top: 4rem; font-family: var(--mono); font-size: 0.65rem; color: var(--muted); letter-spacing: 0.05em; }
+    @media (max-width: 480px) { .days-grid { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); } .stat-number { font-size: 2.2rem; } }
   </style>
 </head>
 <body>
+
+<canvas id="fireworks"></canvas>
+
+<!-- CELEBRATION SCREEN -->
+<div id="celebration">
+  <div class="cel-emoji">🎉</div>
+  <div class="cel-title">YOU SURVIVED.</div>
+  <div class="cel-sub">52 days. countless meetings. one very long excel sheet.<br>the internship is officially dead. you are not.</div>
+  <div class="cel-stats" id="cel-stats"></div>
+  <button class="cel-btn" onclick="document.getElementById('celebration').classList.remove('show'); stopFireworks();">
+    view the full journey →
+  </button>
+</div>
 
 <header>
   <p class="eyebrow">Internship Survival Tracker</p>
@@ -319,31 +272,14 @@
 </div>
 
 <script>
-  // ── SUPABASE CONFIG ──
+  // ── SUPABASE ──
   const SUPABASE_URL = 'https://rprlwfagycyznblsyxpq.supabase.co/rest/v1';
   const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJwcmx3ZmFneWN5em5ibHN5eHBxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODExNjI5NjcsImV4cCI6MjA5NjczODk2N30.3UITh1EYBA58CSf-ImK6691uvnZwC2mb2PTwlE5Jjqw';
-
-  const HEADERS = {
-    'apikey': SUPABASE_KEY,
-    'Authorization': 'Bearer ' + SUPABASE_KEY,
-    'Content-Type': 'application/json',
-    'Prefer': 'resolution=merge-duplicates'
-  };
-
-  async function dbGet(key) {
-    const res = await fetch(`${SUPABASE_URL}/tracker?key=eq.${key}&select=value`, { headers: HEADERS });
-    const data = await res.json();
-    return data && data[0] ? data[0].value : null;
-  }
+  const HEADERS = { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'resolution=merge-duplicates' };
 
   async function dbSet(key, value) {
-    await fetch(`${SUPABASE_URL}/tracker`, {
-      method: 'POST',
-      headers: HEADERS,
-      body: JSON.stringify({ key, value, updated_at: new Date().toISOString() })
-    });
+    await fetch(`${SUPABASE_URL}/tracker`, { method: 'POST', headers: HEADERS, body: JSON.stringify({ key, value, updated_at: new Date().toISOString() }) });
   }
-
   async function dbLoadAll() {
     const res = await fetch(`${SUPABASE_URL}/tracker?select=key,value`, { headers: HEADERS });
     const rows = await res.json();
@@ -358,33 +294,26 @@
     return { done, notes, spend };
   }
 
-  // ── SYNC STATUS ──
   function setSyncStatus(state, text) {
-    const dot   = document.getElementById('sync-dot');
-    const label = document.getElementById('sync-label');
-    dot.className = 'sync-dot ' + state;
-    label.textContent = text;
+    document.getElementById('sync-dot').className = 'sync-dot ' + state;
+    document.getElementById('sync-label').textContent = text;
   }
 
   // ── DATE HELPERS ──
   const START = new Date(2026, 5, 10);
   const END   = new Date(2026, 6, 31);
+  const LAST_DAY = new Date(2026, 6, 31);
   const DAYS_OF_WEEK = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   const MONTH_NAMES  = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 
-  function allDays() {
-    const days = []; let d = new Date(START);
-    while (d <= END) { days.push(new Date(d)); d.setDate(d.getDate()+1); }
-    return days;
-  }
-  function today() { const t = new Date(); t.setHours(0,0,0,0); return t; }
-  function dateKey(d) { return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
-  function formatFull(d) { return `${DAYS_OF_WEEK[d.getDay()]}, ${MONTH_NAMES[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`; }
+  function allDays() { const days = []; let d = new Date(START); while (d <= END) { days.push(new Date(d)); d.setDate(d.getDate()+1); } return days; }
+  function today()   { const t = new Date(); t.setHours(0,0,0,0); return t; }
+  function dateKey(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+  function formatFull(d){ return `${DAYS_OF_WEEK[d.getDay()]}, ${MONTH_NAMES[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`; }
 
   const days = allDays();
-  let done  = {};
-  let notes = {};
-  let spend = {};
+  let done = {}, notes = {}, spend = {};
+  let celebrationShown = false;
 
   // ── STATS ──
   function renderStats() {
@@ -394,6 +323,17 @@
     const pct       = Math.round((completed / total) * 100);
     const totalSpent = Object.values(spend).reduce((s, v) => s + (parseFloat(v) || 0), 0);
     const spentDisplay = '₹' + Math.round(totalSpent);
+
+    // working days = Mon-Fri only
+    const workingDays = days.filter(d => d.getDay() !== 0 && d.getDay() !== 6).length;
+    const todayDate = today();
+    // working days elapsed so far (past + today, within internship range)
+    const workingElapsed = days.filter(d => {
+      const day = d.getDay();
+      return day !== 0 && day !== 6 && d <= todayDate;
+    }).length;
+    const avgSpend = workingElapsed > 0 ? Math.round(totalSpent / workingElapsed) : 0;
+
     document.getElementById('stats').innerHTML = `
       <div class="stat-card highlight">
         <div class="stat-number">${remaining}</div>
@@ -407,17 +347,32 @@
         <div class="stat-number">${total}</div>
         <div class="stat-label">total days</div>
       </div>
+      <div class="stat-card">
+        <div class="stat-number">${workingDays}</div>
+        <div class="stat-label">working days</div>
+      </div>
       <div class="stat-card money-card">
         <div class="stat-number">${spentDisplay}</div>
         <div class="stat-label">total spent</div>
+      </div>
+      <div class="stat-card money-card">
+        <div class="stat-number">₹${avgSpend}</div>
+        <div class="stat-label">avg / work day</div>
       </div>`;
     document.getElementById('progress-fill').style.width = pct + '%';
     document.getElementById('pct-label').textContent = pct + '% survived';
+
+    // trigger celebration at 100%
+    if (pct === 100 && !celebrationShown) {
+      celebrationShown = true;
+      setTimeout(() => triggerCelebration(completed, totalSpent), 600);
+    }
   }
 
   // ── CALENDAR ──
   function renderCalendar() {
     const todayDate = today();
+    const isLastDay = todayDate.getTime() === LAST_DAY.getTime();
     const months = {};
     days.forEach(d => {
       const mk = `${d.getFullYear()}-${d.getMonth()}`;
@@ -436,14 +391,22 @@
       grid.className = 'days-grid';
 
       month.days.forEach(d => {
-        const key     = dateKey(d);
-        const isToday = d.getTime() === todayDate.getTime();
-        const isPast  = d < todayDate;
-        const isDone  = !!done[key];
-        const hasNote = !!(notes[key] && notes[key].trim());
+        const key      = dateKey(d);
+        const isToday  = d.getTime() === todayDate.getTime();
+        const isPast   = d < todayDate;
+        const isJul31  = d.getMonth() === 6 && d.getDate() === 31;
+        // Jul 31 is locked unless today IS Jul 31
+        const isLocked = isJul31 && !isLastDay && !isPast;
+        const isDone   = !!done[key];
+        const hasNote  = !!(notes[key] && notes[key].trim());
 
         const cell = document.createElement('div');
-        cell.className = 'day-cell' + (isDone ? ' completed' : '') + (isToday ? ' today' : '');
+        let cellClass = 'day-cell';
+        if (isDone)    cellClass += ' completed';
+        if (isToday)   cellClass += ' today';
+        if (isLocked)  cellClass += ' locked';
+        if (isJul31 && !isLocked) cellClass += ' last-day';
+        cell.className = cellClass;
 
         cell.innerHTML = `
           <div class="cell-top">
@@ -455,32 +418,31 @@
             <div class="day-info">
               <div class="day-num">${String(d.getDate()).padStart(2,'0')}</div>
               <div class="day-name">${DAYS_OF_WEEK[d.getDay()]}</div>
-              ${isToday ? '<div class="today-badge">today</div>' : ''}
+              ${isToday  ? '<div class="today-badge">today</div>'  : ''}
+              ${isLocked ? '<div class="lock-badge">🔒 jul 31</div>' : ''}
             </div>
           </div>
-          <button class="note-btn${hasNote ? ' has-note' : ''}">
+          ${!isLocked ? `<button class="note-btn${hasNote ? ' has-note' : ''}">
             <span class="note-dot"></span>
             ${hasNote ? 'view note' : (isToday || isPast ? '+ note' : 'note')}
-          </button>
+          </button>` : ''}
           ${spend[key] ? `<div class="spend-badge">₹${spend[key]}</div>` : ''}`;
 
-        cell.querySelector('.cell-top').addEventListener('click', async () => {
-          done[key] = !done[key];
-          cell.classList.toggle('completed', done[key]);
-          renderStats();
-          setSyncStatus('syncing', 'saving...');
-          try {
-            await dbSet('done:' + key, JSON.stringify(done[key]));
-            setSyncStatus('synced', 'saved');
-          } catch {
-            setSyncStatus('error', 'save failed');
-          }
-        });
+        if (!isLocked) {
+          cell.querySelector('.cell-top').addEventListener('click', async () => {
+            done[key] = !done[key];
+            cell.classList.toggle('completed', done[key]);
+            renderStats();
+            setSyncStatus('syncing', 'saving...');
+            try { await dbSet('done:' + key, JSON.stringify(done[key])); setSyncStatus('synced', 'saved'); }
+            catch { setSyncStatus('error', 'save failed'); }
+          });
 
-        cell.querySelector('.note-btn').addEventListener('click', (e) => {
-          e.stopPropagation();
-          openModal(new Date(d), key, isToday || isPast);
-        });
+          cell.querySelector('.note-btn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            openModal(new Date(d), key, isToday || isPast);
+          });
+        }
 
         grid.appendChild(cell);
       });
@@ -495,10 +457,9 @@
 
   function openModal(d, key, canEdit) {
     currentModalKey = key;
-    const existing  = notes[key] || '';
+    const existing = notes[key] || '';
     document.getElementById('modal-date').textContent = formatFull(d);
-
-    const body   = document.getElementById('modal-body');
+    const body = document.getElementById('modal-body');
     const footer = document.getElementById('modal-footer');
 
     if (canEdit) {
@@ -520,13 +481,10 @@
       document.getElementById('modal-save-btn').addEventListener('click', saveNote);
       document.getElementById('modal-cancel-btn').addEventListener('click', closeModal);
     } else {
-      body.innerHTML = `
-        <div class="modal-label">entry</div>
-        <div class="note-view empty">this day hasn't happened yet.</div>`;
+      body.innerHTML = `<div class="modal-label">entry</div><div class="note-view empty">this day hasn't happened yet.</div>`;
       footer.innerHTML = `<button class="btn btn-ghost" id="modal-cancel-btn">close</button>`;
       document.getElementById('modal-cancel-btn').addEventListener('click', closeModal);
     }
-
     document.getElementById('modal-overlay').classList.add('open');
   }
 
@@ -541,28 +499,98 @@
     renderStats();
     setSyncStatus('syncing', 'saving...');
     try {
-      await Promise.all([
-        dbSet('note:' + keyToSave, val || ''),
-        dbSet('spend:' + keyToSave, spendVal || '')
-      ]);
+      await Promise.all([dbSet('note:' + keyToSave, val || ''), dbSet('spend:' + keyToSave, spendVal || '')]);
       setSyncStatus('synced', 'saved');
-    } catch {
-      setSyncStatus('error', 'save failed');
+    } catch { setSyncStatus('error', 'save failed'); }
+  }
+
+  function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); currentModalKey = null; }
+  document.getElementById('modal-close').addEventListener('click', closeModal);
+  document.getElementById('modal-overlay').addEventListener('click', (e) => { if (e.target === document.getElementById('modal-overlay')) closeModal(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+  // ── CELEBRATION ──
+  let fireworksRAF = null;
+
+  function triggerCelebration(completedDays, totalSpent) {
+    const totalNotes = Object.values(notes).filter(v => v && v.trim()).length;
+    document.getElementById('cel-stats').innerHTML = `
+      <div class="cel-stat"><div class="cel-stat-num">${completedDays}</div><div class="cel-stat-label">days survived</div></div>
+      <div class="cel-stat"><div class="cel-stat-num">${totalNotes}</div><div class="cel-stat-label">days journaled</div></div>
+      <div class="cel-stat"><div class="cel-stat-num">₹${Math.round(totalSpent)}</div><div class="cel-stat-label">total spent</div></div>
+    `;
+    document.getElementById('celebration').classList.add('show');
+    launchConfetti();
+    startFireworks();
+  }
+
+  function launchConfetti() {
+    const colors = ['#7c6aff','#a78bfa','#5ecc77','#f0a500','#e05555','#38bdf8','#fb7185'];
+    for (let i = 0; i < 160; i++) {
+      setTimeout(() => {
+        const el = document.createElement('div');
+        el.className = 'confetti-piece';
+        el.style.left = Math.random() * 100 + 'vw';
+        el.style.background = colors[Math.floor(Math.random() * colors.length)];
+        el.style.width  = (6 + Math.random() * 10) + 'px';
+        el.style.height = (6 + Math.random() * 10) + 'px';
+        el.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+        el.style.animationDuration = (2 + Math.random() * 3) + 's';
+        el.style.animationDelay = '0s';
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 5500);
+      }, i * 30);
     }
   }
 
-  function closeModal() {
-    document.getElementById('modal-overlay').classList.remove('open');
-    currentModalKey = null;
+  // ── FIREWORKS ──
+  function startFireworks() {
+    const canvas = document.getElementById('fireworks');
+    const ctx = canvas.getContext('2d');
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const particles = [];
+    const colors = ['#7c6aff','#a78bfa','#5ecc77','#f0a500','#fb7185','#38bdf8','#fff'];
+
+    function spawnBurst() {
+      const x = 0.2 * canvas.width + Math.random() * 0.6 * canvas.width;
+      const y = 0.15 * canvas.height + Math.random() * 0.5 * canvas.height;
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      for (let i = 0; i < 60; i++) {
+        const angle = (Math.PI * 2 / 60) * i;
+        const speed = 2 + Math.random() * 5;
+        particles.push({ x, y, vx: Math.cos(angle)*speed, vy: Math.sin(angle)*speed, alpha: 1, color, size: 2 + Math.random()*3 });
+      }
+    }
+
+    let lastBurst = 0;
+    function loop(ts) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (ts - lastBurst > 700) { spawnBurst(); lastBurst = ts; }
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.x += p.vx; p.y += p.vy; p.vy += 0.08; p.vx *= 0.98; p.alpha -= 0.018;
+        if (p.alpha <= 0) { particles.splice(i, 1); continue; }
+        ctx.globalAlpha = p.alpha;
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+      fireworksRAF = requestAnimationFrame(loop);
+    }
+    fireworksRAF = requestAnimationFrame(loop);
   }
 
-  document.getElementById('modal-close').addEventListener('click', closeModal);
-  document.getElementById('modal-overlay').addEventListener('click', (e) => {
-    if (e.target === document.getElementById('modal-overlay')) closeModal();
-  });
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+  function stopFireworks() {
+    if (fireworksRAF) cancelAnimationFrame(fireworksRAF);
+    const canvas = document.getElementById('fireworks');
+    canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+  }
 
-  // ── INIT: load from Supabase ──
+  // ── INIT ──
   (async () => {
     setSyncStatus('syncing', 'loading...');
     try {
@@ -571,9 +599,7 @@
       notes = data.notes;
       spend = data.spend;
       setSyncStatus('synced', 'synced');
-    } catch {
-      setSyncStatus('error', 'offline — changes may not save');
-    }
+    } catch { setSyncStatus('error', 'offline — changes may not save'); }
     renderStats();
     renderCalendar();
   })();
